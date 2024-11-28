@@ -1,15 +1,17 @@
-# Road Runner Quickstart
+# RoboSmart#19110 FTC Season 9: Into the Deep
 
-An example FTC project using [Road Runner](https://github.com/acmerobotics/road-runner).
+Welcome to the official code repository of RoboSmart#19110, a robotics team proudly representing Romania in the FIRST Tech Challenge (FTC). This repository contains all the software powering our robot for the Season 9 challenge: Into the Deep.
 
-## Installation
+# Overview
 
-1. Download or clone this repo with `git clone --single-branch -b quickstart1 https://github.com/acmerobotics/road-runner-quickstart.git`.
+This codebase is designed to handle all aspects of our robot's functionality for the Into the Deep challenge, including:
 
-1. Open the project in Android Studio and build `TeamCode` like any other `ftc_app` project.
+> TeleOp Control: Intuitive and efficient driver-controlled operations.
 
-1. If you have trouble with multidex, enable proguard by changing `useProguard` to `true` in `build.common.gradle`.
+> Modular Design: A clean, scalable architecture for ease of development and debugging.
 
-## Documentation
+TODO :
 
-Check out the [online quickstart documentation](https://rr.brott.dev/docs/v0-5/quickstart/introduction/).
+> Odometry assisted autonomous navigation, for better results.
+
+> Autonomous Navigation: Robust strategies for scoring and navigating the field autonomously.
