@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,84 +11,47 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class HMap {
 
-    public DcMotorEx colectare = null,
-                     glisiere_dr = null,
-                     glisiere_st = null;
+    public static double bratPower = 0.1;
+    public static int bratPos = 1000;
+    public static double bratSwivel = 0.0;
+    public static double putereColectare = 0.5;
+    public DcMotorEx brat = null;
+    public Servo colect = null,
+            servoBrat = null;
 
-    public Servo cutie_dr = null,
-                cutie_st = null,
-                avion = null,
-                cutie = null;
-
-    public static double cutie_inkis = 0.55,
-                    cutie_deskis = 0.4,
-
-                    avion_armat = 0.8,
-                    avion_tras = 0.3,
-                    cutie_dr_extins = 0.62,
-                    cutie_st_extins = 0.38,
-                    cutie_dr_strans = 0.9,
-                    cutie_st_strans  = 0.1;
-   public void init(HardwareMap hmap){
-
-       
-
-      colectare = hmap.get(DcMotorEx.class, "colectare");
-      glisiere_dr = hmap.get(DcMotorEx.class, "glisiere_dr");
-      glisiere_st = hmap.get(DcMotorEx.class, "glisiere_st");
-
-      glisiere_dr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-      glisiere_st.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-      glisiere_dr.setDirection(DcMotorSimple.Direction.REVERSE);
-
-       glisiere_st.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       glisiere_dr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-      glisiere_dr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-      glisiere_st.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    public void init(HardwareMap hmap) {
 
 
-       cutie_dr = hmap.get(Servo.class, "cutie_dr");
-       cutie_st = hmap.get(Servo.class, "cutie_st");
+        brat = hmap.get(DcMotorEx.class, "brat");
 
-       cutie = hmap.get(Servo.class, "cutie");
 
-       avion = hmap.get(Servo.class, "avion");
+        colect = hmap.get(Servo.class, "colect");
+        servoBrat = hmap.get(Servo.class, "servoBrat");
 
-       armeaza_avion();
-       strange_cutie();
-       inchide_cutie();
+        brat.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        brat.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brat.setDirection(DcMotorSimple.Direction.FORWARD);
+        brat.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        ridicaBrat();
+        rotireBrat();
+        colectare();
 
    }
 
-   public void extinde_cutie(){
-       cutie_dr.setPosition(cutie_dr_extins);
-       cutie_st.setPosition(cutie_st_extins);
-   }
-
-    public void strange_cutie(){
-        cutie_dr.setPosition(cutie_dr_strans);
-        cutie_st.setPosition(cutie_st_strans);
+    public void ridicaBrat() {
+        brat.setTargetPosition(bratPos);
+        brat.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        brat.setPower(bratPower);
+        brat.setPower(0);
+        brat.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void deschide_cutie()
-    {
-        cutie.setPosition(cutie_deskis);
+    public void rotireBrat() {
+        servoBrat.setPosition(bratSwivel);
     }
 
-    public void inchide_cutie()
-    {
-        cutie.setPosition(cutie_inkis);
+    public void colectare() {
+        colect.setPosition(putereColectare);
     }
-
-    public void trage_avion(){
-       avion.setPosition(avion_tras);
-    }
-
-    public void armeaza_avion(){
-       avion.setPosition(avion_armat);
-    }
-
 }
