@@ -23,7 +23,6 @@ public class TeleOP extends LinearOpMode {
     public static double Ki = 0.00001; // Factor integrativ
     public static double Kd = 0.00001; // Factor derivativ
     // Parametrii robotului
-    public static double armSpeed = 10; // Viteza manuală a brațului (reglabilă)
     public static double speed = 85;    // Viteza de mișcare a robotului (reglabilă)
     SampleMecanumDrive drive;
     PIDBrat pidBrat;
@@ -56,20 +55,19 @@ public class TeleOP extends LinearOpMode {
             );
 
 
-            double bratPower = -gamepad2.left_stick_y * armSpeed / 100;
+            double bratPower = -gamepad2.left_stick_y * HMap.bratPower / 10;
+            robot.brat.setPower(bratPower);
 
             // Reglaj viteză mecanum drive
             if (gamepad1.left_bumper) speed = 50; // Viteză redusă
             if (gamepad1.right_bumper) speed = 85; // Viteză normală
 
-
-            // Alte controale (servo-uri, colectare)
-            if (gamepad2.a) {
-                robot.servoBrat.setPosition(0);
+            if (gamepad2.x) {
+                robot.colect.setPosition(0.6);
             }
-
-            if (gamepad2.b) robot.colect.setPosition(0.5);
-            else robot.colect.setPosition(0.0);
+            if (gamepad2.a) {
+                robot.colect.setPosition(HMap.colectarePos);
+            }
 
             // Telemetry
             telemetry.addData("Viteză Robot", speed);
@@ -81,7 +79,6 @@ public class TeleOP extends LinearOpMode {
             telemetry.addData("Poziție Braț (Țintă)", bratTarget);
             telemetry.addData("PID Output Braț", robot.brat.getPower());
 
-            telemetry.addData("Poziție Servo Braț", robot.servoBrat.getPosition());
             telemetry.addData("Poziție Servo Colectare", robot.colect.getPosition());
 
             telemetry.update();

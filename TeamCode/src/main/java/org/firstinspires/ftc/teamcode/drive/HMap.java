@@ -8,16 +8,17 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.acmerobotics.dashboard.config.Config;
+
+import org.firstinspires.ftc.teamcode.PIDBrat;
+
 @Config
 public class HMap {
 
-    public static double bratPower = 0.1;
+    public static double bratPower = 1;
     public static int bratPos = 1000;
-    public static double bratSwivel = 0.0;
-    public static double putereColectare = 0.5;
+    public static double colectarePos = 0.4;
     public DcMotorEx brat = null;
-    public Servo colect = null,
-            servoBrat = null;
+    public Servo colect = null;
 
     public void init(HardwareMap hmap) {
 
@@ -26,32 +27,47 @@ public class HMap {
 
 
         colect = hmap.get(Servo.class, "colect");
-        servoBrat = hmap.get(Servo.class, "servoBrat");
 
         brat.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        brat.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         brat.setDirection(DcMotorSimple.Direction.FORWARD);
         brat.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         ridicaBrat();
-        rotireBrat();
         colectare();
-
    }
 
     public void ridicaBrat() {
-        brat.setTargetPosition(bratPos);
-        brat.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        brat.setPower(bratPower);
-        brat.setPower(0);
-        brat.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
+        // Instanțiere PIDBrat cu constantele dorite
+        PIDBrat pid = new PIDBrat(0.01, 0.001, 0.1); // Ajustează valorile kP, kI, kD în funcție de necesitate
+        pid.setTargetPosition(bratPos); // Setăm poziția țintă relativ la punctul de plecare (0)
 
-    public void rotireBrat() {
-        servoBrat.setPosition(bratSwivel);
+        // Buclă de control PID
+        while (Math.abs(brat.getCurrentPosition() - bratPos) > 5) { // Toleranță la poziție (5 ticks)
+            double currentPos = brat.getCurrentPosition();
+            double power = pid.update(currentPos);
+
+            // Motorul trebuie să schimbe direcția dacă trece de poziția țintă
+            if (currentPos > bratPos && power > 0) {
+                power = -power; // Inversăm direcția dacă trece de poziție
+            }
+
+            // Aplicarea limitelor pentru putere (în caz de suprasaturație)
+            power = Math.max(-1.0, Math.min(1.0, power));
+
+            brat.setPower(power);
+
+            try {
+                sleep(10); // Pauză scurtă pentru stabilitate (10ms)
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Oprirea motorului
+        brat.setPower(0);
     }
 
     public void colectare() {
-        colect.setPosition(putereColectare);
+        colect.setPosition(colectarePos);
     }
 }
