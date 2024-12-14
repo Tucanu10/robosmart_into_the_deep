@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.PIDBrat;
 @Config
 public class HMap {
 
-    public static double bratPower = 1;
+    public static double bratPower = 3; // Intre 0 si 10 pentru adjustarea vitezei bratului
     public static int bratPos = 1000;
     public static double colectarePos = 0.4;
     public DcMotorEx brat = null;
@@ -32,8 +32,7 @@ public class HMap {
         brat.setDirection(DcMotorSimple.Direction.FORWARD);
         brat.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ridicaBrat();
-        colectare();
+        colectare(colectarePos);
    }
 
     public void ridicaBrat() {
@@ -67,7 +66,7 @@ public class HMap {
         brat.setPower(0);
     }
 
-    public void colectare() {
-        colect.setPosition(colectarePos);
+    public void colectare(double pos) {
+        colect.setPosition(pos);
     }
 }

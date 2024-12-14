@@ -63,10 +63,10 @@ public class TeleOP extends LinearOpMode {
             if (gamepad1.right_bumper) speed = 85; // Viteză normală
 
             if (gamepad2.x) {
-                robot.colect.setPosition(0.6);
+                robot.colectare(0.6);
             }
             if (gamepad2.a) {
-                robot.colect.setPosition(HMap.colectarePos);
+                robot.colectare(HMap.colectarePos);
             }
 
             // Telemetry
